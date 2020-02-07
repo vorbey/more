@@ -14,15 +14,19 @@ def index(request):
     all_cities = []
     for city in cities:
         res = requests.get(url.format(city.name)).json()
-        city_info = {
-            'city': city.name,
-            'temp': res["main"]["temp"],
-            'humidity': res["main"]["humidity"],
-            'wind': res["wind"]["speed"],
-            'winde': res["wind"]["deg"],
-            'icon': res["weather"][0]["icon"]
-        }
-        all_cities.append(city_info)
+        try:
+            city_info = {
+                'city': city.name,
+                'temp': res["main"]["temp"],
+                'humidity': res["main"]["humidity"],
+                'wind': res["wind"]["speed"],
+                'winde': res["wind"]["deg"],
+                'icon': res["weather"][0]["icon"]
+            }
+            all_cities.append(city_info)
+        except KeyError:
+            print()
+
 
     context = {'all_info': all_cities, 'form': form}
     return render(request, 'pogg/index.html', context)
